@@ -76,8 +76,7 @@ function render() {
           ${renderNavBtn('dashboard', 'الرئيسية', ICONS.book)}
           ${renderNavBtn('mistakes', 'أخطائي', ICONS.alert, state.mistakes.filter(m => !m.resolved).length)}
           ${renderMoreNavBtn()}
-          ${renderNavBtn('reports', 'التقارير', ICONS.chart)}
-          ${renderNavBtn('achievements', 'الإنجازات', ICONS.award)}
+          
         </div>
       </div>
     </nav>
