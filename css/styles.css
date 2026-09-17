@@ -1,4 +1,4 @@
-م٨:root {
+:root {
     --radius: 0.75rem;
     --bg: #f5f1e8;
     --fg: #1a2b25;
@@ -170,7 +170,7 @@
     position: fixed;
     inset: 0;
     z-index: 9999;
-    background: #ffffff;
+    background: #f5f1e8;
     display: flex;
     align-items: center;
     justify-content: center;
