@@ -75,9 +75,7 @@
     const loader = document.getElementById('app-loader');
     const app = document.getElementById('app');
 
-    if (app) {
-      app.classList.add('app-ready');
-    }
+    if (app) app.classList.add('app-ready');
 
     if (loader) {
       loader.classList.add('is-hidden');
@@ -91,9 +89,14 @@
   }
 
   function showError(error) {
-    console.error('رفيق القرآن:', error);
+    console.error('رفيق القرآن - ERROR:', error);
 
     const app = document.getElementById('app');
+
+    const message =
+      error && error.message
+        ? error.message
+        : String(error);
 
     if (app) {
       app.classList.add('app-ready');
@@ -101,17 +104,62 @@
       app.innerHTML = `
         <div style="
           min-height:100vh;
+          box-sizing:border-box;
+          padding:40px 20px;
           display:flex;
           align-items:center;
           justify-content:center;
-          padding:30px;
-          text-align:center;
           font-family:Cairo,sans-serif;
           direction:rtl;
+          background:#fbf5e8;
         ">
-          <div>
-            <h2>حدث خطأ أثناء تشغيل التطبيق</h2>
-            <p>حاول إعادة تحميل الصفحة.</p>
+          <div style="
+            width:100%;
+            max-width:600px;
+            background:white;
+            border-radius:20px;
+            padding:30px;
+            box-shadow:0 10px 40px rgba(0,0,0,.08);
+            text-align:center;
+          ">
+            <div style="font-size:50px;margin-bottom:15px">⚠️</div>
+
+            <h2 style="margin:0 0 15px">
+              حدث خطأ أثناء تشغيل التطبيق
+            </h2>
+
+            <p style="color:#777">
+              تفاصيل الخطأ:
+            </p>
+
+            <div style="
+              direction:ltr;
+              text-align:left;
+              background:#f5f5f5;
+              padding:15px;
+              border-radius:12px;
+              overflow:auto;
+              color:#b42318;
+              font-family:monospace;
+              font-size:13px;
+              white-space:pre-wrap;
+            ">${message.replace(/</g, '&lt;')}</div>
+
+            <button
+              onclick="location.reload()"
+              style="
+                margin-top:20px;
+                border:0;
+                padding:12px 25px;
+                border-radius:12px;
+                background:#1a6b54;
+                color:white;
+                font-family:Cairo,sans-serif;
+                cursor:pointer;
+              "
+            >
+              إعادة تحميل التطبيق
+            </button>
           </div>
         </div>
       `;
@@ -122,21 +170,18 @@
 
   try {
 
-    // تحميل البيانات المحفوظة
-    if (typeof loadState === 'function') {
-      loadState();
-    } else {
+    if (typeof loadState !== 'function') {
       throw new Error('الدالة loadState غير موجودة');
     }
 
-    // تشغيل الواجهة
-    if (typeof render === 'function') {
-      render();
-    } else {
+    loadState();
+
+    if (typeof render !== 'function') {
       throw new Error('الدالة render غير موجودة');
     }
 
-    // إظهار التطبيق
+    render();
+
     hideLoader();
 
   } catch (error) {
@@ -145,6 +190,5 @@
 
 })();
 </script>
-
 </body>
 </html>
