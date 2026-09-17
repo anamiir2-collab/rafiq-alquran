@@ -1785,6 +1785,3 @@ if (state.user && state.plan) {
     }
   } catch (e) { console.warn('redistribute failed', e); }
 }
-// ================== INIT ==================
-window.render = render;
-</script>
