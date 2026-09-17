@@ -247,7 +247,7 @@
     width: 0%;
     border-radius: inherit;
     background: linear-gradient(90deg, #0e5b86, #58a9a7);
-    animation: loaderProgress 10s linear forwards;
+    animation: loaderProgress 5s linear forwards;
   }
   #app-loader .loader-credit {
     margin-top: 16px;
