@@ -1,4 +1,4 @@
-٨:root {
+م٨:root {
     --radius: 0.75rem;
     --bg: #faf8f3;
     --fg: #1a2b25;
@@ -954,7 +954,116 @@ main {
 
   .nav-btn.active::before {
     width: 51px;
-    height: 51px;
+    height: 51px;/* =========================================
+   رفيق القرآن - الرئيسية في المنتصف
+   ========================================= */
+
+/* الشريط السفلي */
+.bottomnav {
+  overflow: visible !important;
+}
+
+.bottomnav .nav-items {
+  position: relative;
+  overflow: visible !important;
+}
+
+/* الرئيسية */
+.bottomnav .nav-items .nav-btn:first-child {
+  position: absolute !important;
+  left: 50% !important;
+  right: auto !important;
+  top: 0;
+  width: 66px !important;
+  height: 66px !important;
+  min-width: 66px !important;
+  flex: none !important;
+  transform: translateX(-50%) translateY(-13px) !important;
+  z-index: 20;
+  border-radius: 50% !important;
+  background: var(--primary, #2f8f5b) !important;
+  color: white !important;
+  box-shadow:
+    0 8px 22px rgba(0, 0, 0, 0.18),
+    0 0 0 6px var(--bg, #fff) !important;
+  justify-content: center !important;
+}
+
+/* أيقونة الرئيسية */
+.bottomnav .nav-items .nav-btn:first-child svg {
+  width: 27px !important;
+  height: 27px !important;
+  margin: 0 !important;
+}
+
+/* اسم الرئيسية */
+.bottomnav .nav-items .nav-btn:first-child .nav-label {
+  position: absolute;
+  top: 70px;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  font-weight: 800;
+}
+
+/* إلغاء تأثير الارتفاع المعتاد على الرئيسية */
+.bottomnav .nav-items .nav-btn:first-child.active {
+  transform: translateX(-50%) translateY(-18px) !important;
+  z-index: 25;
+}
+
+/* حركة الضغط */
+.bottomnav .nav-items .nav-btn:first-child:active {
+  transform: translateX(-50%) translateY(-10px) scale(.94) !important;
+}
+
+/* نعمل مساحة في المنتصف بين الزرين 3 و 4 */
+.bottomnav .nav-items .nav-btn:nth-child(3) {
+  margin-inline-end: 34px !important;
+}
+
+.bottomnav .nav-items .nav-btn:nth-child(4) {
+  margin-inline-start: 34px !important;
+}
+
+/* الحلقة حوالين الرئيسية عند التفعيل */
+.bottomnav .nav-items .nav-btn:first-child.active::before {
+  left: 50% !important;
+  right: auto !important;
+  margin-left: -27px !important;
+}
+
+/* الموبايل */
+@media (max-width: 600px) {
+
+  .bottomnav .nav-items .nav-btn:first-child {
+    width: 60px !important;
+    height: 60px !important;
+    min-width: 60px !important;
+    transform: translateX(-50%) translateY(-11px) !important;
+  }
+
+  .bottomnav .nav-items .nav-btn:first-child.active {
+    transform: translateX(-50%) translateY(-16px) !important;
+  }
+
+  .bottomnav .nav-items .nav-btn:first-child .nav-label {
+    top: 64px;
+    font-size: 11px;
+  }
+
+  .bottomnav .nav-items .nav-btn:nth-child(3) {
+    margin-inline-end: 27px !important;
+  }
+
+  .bottomnav .nav-items .nav-btn:nth-child(4) {
+    margin-inline-start: 27px !important;
+  }
+
+  .bottomnav .nav-items .nav-btn:first-child.active::before {
+    margin-left: -25px !important;
+  }
+}
     top: -8px;
   }
 
