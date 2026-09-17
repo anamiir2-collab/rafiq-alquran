@@ -1,0 +1,36 @@
+# نظام التشغيل
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# المحررات
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.sublime-project
+.sublime-workspace
+
+# ملفات مؤقتة
+*.log
+*.tmp
+*.bak
+*.cache
+
+# مجلدات البناء
+dist/
+build/
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# ملفات بيئة
+.env
+.env.local
+.env.*.local
+
+# ملفات Git
+*.orig
+MERGE_*

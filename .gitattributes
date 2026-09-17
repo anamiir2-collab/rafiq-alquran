@@ -1,0 +1,17 @@
+# تعامل مع ملفات JavaScript و CSS كنصوص
+*.js     text eol=lf
+*.css    text eol=lf
+*.html   text eol=lf
+*.json   text eol=lf
+*.md     text eol=lf
+
+# ملفات الأصول الثنائية
+*.png    binary
+*.jpg    binary
+*.jpeg   binary
+*.gif    binary
+*.svg    text eol=lf
+*.ico    binary
+
+# إخفاء diff للملفات الكبيرة
+*.min.js linguist-generated=true
