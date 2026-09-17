@@ -92,7 +92,66 @@ function renderNavBtn(view, label, icon, badge) {
     ${badge && badge > 0 ? `<span class="nav-badge">${badge > 9 ? '9+' : toAr(badge)}</span>` : ''}
   </button>`;
 }
+let moreMenuOpen = false;
+let moreSelected = null;
 
+function renderMoreNavBtn() {
+  const selected = moreSelected;
+
+  const label =
+    selected === 'reports' ? 'التقارير' :
+    selected === 'achievements' ? 'الإنجازات' :
+    'المزيد';
+
+  const icon =
+    selected === 'reports' ? ICONS.chart :
+    selected === 'achievements' ? ICONS.award :
+    ICONS.list;
+
+  const active = ['reports', 'achievements'].includes(app_view) ? 'active' : '';
+
+  return `
+    <div class="more-nav-wrapper">
+
+      <button class="nav-btn ${active}" onclick="toggleMoreMenu()">
+        ${icon}
+        <span class="nav-label">${label}</span>
+      </button>
+
+      <div class="more-nav-menu ${moreMenuOpen ? 'show' : ''}">
+
+        <button class="more-nav-item ${selected === 'reports' ? 'selected' : ''}"
+                onclick="selectMoreNav('reports')">
+          <span class="more-nav-icon">
+            ${ICONS.chart}
+          </span>
+          <span>التقارير</span>
+        </button>
+
+        <button class="more-nav-item ${selected === 'achievements' ? 'selected' : ''}"
+                onclick="selectMoreNav('achievements')">
+          <span class="more-nav-icon">
+            ${ICONS.award}
+          </span>
+          <span>الإنجازات</span>
+        </button>
+
+      </div>
+
+    </div>
+  `;
+}
+
+function toggleMoreMenu() {
+  moreMenuOpen = !moreMenuOpen;
+  render();
+}
+
+function selectMoreNav(view) {
+  moreSelected = view;
+  moreMenuOpen = false;
+  navigate(view);
+}
 function toggleTheme() {
   const isDark = document.documentElement.classList.contains('dark');
   setTheme(isDark ? 'light' : 'dark');
