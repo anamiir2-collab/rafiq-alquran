@@ -71,10 +71,10 @@ function render() {
     <nav class="bottomnav">
       <div class="container-app">
         <div class="nav-items">
+          ${renderNavBtn('dashboard', 'الرئيسية', ICONS.book)}
           ${renderNavBtn('calendar', 'التقويم', ICONS.calendar)}
           ${renderNavBtn('test', 'اختبر حفظي', ICONS.list)}
-          ${renderNavBtn('dashboard', 'الرئيسية', ICONS.book)}
-          ${renderNavBtn('mistakes', 'أخطائي', ICONS.alert,state.mistakes.filter(m => !m.resolved).length)}
+          ${renderNavBtn('mistakes', 'أخطائي', ICONS.alert, state.mistakes.filter(m => !m.resolved).length)}
           ${renderNavBtn('reports', 'التقارير', ICONS.chart)}
           ${renderNavBtn('achievements', 'الإنجازات', ICONS.award)}
         </div>
@@ -1771,7 +1771,7 @@ render();
     app.classList.add('app-ready');
     loader.classList.add('is-hidden');
     setTimeout(() => loader.remove(), 950);
-  }, 2000);
+  }, 10000);
 })();
 
 // Auto-redistribute on first load
@@ -1785,5 +1785,3 @@ if (state.user && state.plan) {
     }
   } catch (e) { console.warn('redistribute failed', e); }
 }
-
-
