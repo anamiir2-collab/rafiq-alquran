@@ -75,8 +75,35 @@ function render() {
           ${renderNavBtn('test', 'اختبر حفظي', ICONS.list)}
           ${renderNavBtn('dashboard', 'الرئيسية', ICONS.book)}
           ${renderNavBtn('mistakes', 'أخطائي', ICONS.alert, state.mistakes.filter(m => !m.resolved).length)}
-          ${renderNavBtn('reports', 'التقارير', ICONS.chart)}
-          ${renderNavBtn('achievements', 'الإنجازات', ICONS.award)}
+          ${renderMoreNavBtn()}
+          function renderMoreNavBtn() {
+  return `<button class="nav-btn" onclick="toggleMoreMenu()">
+    ${ICONS.more}
+    <span class="nav-label">المزيد</span>
+  </button>`;
+}
+
+function toggleMoreMenu() {
+  const menu = document.getElementById('more-menu');
+  if (menu) {
+    menu.remove();
+    return;
+  }
+
+  document.body.insertAdjacentHTML('beforeend', `
+    <div id="more-menu" class="more-menu">
+      <button onclick="navigate('reports'); document.getElementById('more-menu')?.remove()">
+        ${ICONS.chart}
+        <span>التقارير</span>
+      </button>
+
+      <button onclick="navigate('achievements'); document.getElementById('more-menu')?.remove()">
+        ${ICONS.award}
+        <span>الإنجازات</span>
+      </button>
+    </div>
+  `);
+}
         </div>
       </div>
     </nav>
