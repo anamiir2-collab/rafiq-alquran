@@ -1,20 +1,20 @@
 :root {
     --radius: 0.75rem;
-    --bg: #abaab5;
-    --fg: #1a2b25;
-    --card: #ffffff;
-    --muted: #f3efe6;
-    --muted-fg: #6b7d75;
-    --primary: #1a6b54;
-    --primary-fg: #ffffff;
-    --primary-light: #e8f3ee;
-    --border: #e5ddc8;
-    --accent: #d4a574;
-    --success: #16a34a;
-    --warning: #d97706;
-    --danger: #dc2626;
-    --shadow: 0 4px 12px rgba(26, 107, 84, 0.06);
-  }
+    --bg: #abaab5;          /* الخلفية الرمادية الهادئة */
+    --fg: #1c2421;          /* لون نص داكن وواضحة جداً فوق الخلفية */
+    --card: #ffffff;        /* خلفية الكروت (بيضاء ناصعة) */
+    --muted: #9c9ca6;       /* لون فرعي للخلفيات الثانوية */
+    --muted-fg: #4f525a;    /* نصوص ثانوية هادئة ومقروءة */
+    --primary: #6f9e7e;     /* الأخضر الساج المميز بتاعك */
+    --primary-fg: #ffffff;  /* نص اللون الأساسي */
+    --primary-light: #e5efe8; /* خلفية خفيفة من الأخضر لتمييز العناصر */
+    --border: #92929e;      /* حدود متناسقة وناعمة مع الرمادي */
+    --accent: #d4a574;      /* لون إبراز دافئ (عسلي) يكسر اللون الحيادي */
+    --success: #16a34a;     /* نجاح */
+    --warning: #d97706;     /* تحذير */
+    --danger: #dc2626;      /* خطر / حذف */
+    --shadow: 0 4px 16px rgba(28, 36, 33, 0.12); /* ظل ناعم ومتناسق */
+}
   .dark {
     --bg: #0f1a16;
     --fg: #e8f0ec;
