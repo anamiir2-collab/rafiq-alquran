@@ -1,20 +1,20 @@
 :root {
     :root {
     :root {
-    --radius: 0.75rem;
-    --bg: #f5f1e8;
-    --fg: #1a2b25;
-    --card: #fffdf8;
-    --muted: #eee8da;
-    --muted-fg: #6b7d75;
-    --primary: #1a6b54;
-    --primary-fg: #ffffff;
-    --primary-light: #e8f3ee;
-    --border: #e5ddc8;
-    --accent: #d4a574;
-    --success: #16a34a;
-    --warning: #d97706;
-    --danger: #dc2626;
+        --radius: 0.75rem;
+        --bg: #aec2ba;
+        --fg: #1a2b25;
+        --card: #fffdf8;
+        --muted: #eee8da;
+        --muted-fg: #6b7d75;
+        --primary: #1a6b54;
+        --primary-fg: #ffffff;
+        --primary-light: #e8f3ee;
+        --border: #e5ddc8;
+        --accent: #d4a574;
+        --success: #16a34a;
+        --warning: #d97706;
+        --danger: #dc2626;
     --shadow: 0 4px 12px rgba(26, 107, 84, 0.06);
   }
   .dark {
