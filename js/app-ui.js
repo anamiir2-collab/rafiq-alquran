@@ -1771,7 +1771,7 @@ render();
     app.classList.add('app-ready');
     loader.classList.add('is-hidden');
     setTimeout(() => loader.remove(), 950);
-  }, 10000);
+  }, 2000);
 })();
 
 // Auto-redistribute on first load
