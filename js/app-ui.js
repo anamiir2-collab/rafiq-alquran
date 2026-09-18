@@ -71,39 +71,12 @@ function render() {
     <nav class="bottomnav">
       <div class="container-app">
         <div class="nav-items">
+          ${renderNavBtn('dashboard', 'الرئيسية', ICONS.book)}
           ${renderNavBtn('calendar', 'التقويم', ICONS.calendar)}
           ${renderNavBtn('test', 'اختبر حفظي', ICONS.list)}
-          ${renderNavBtn('dashboard', 'الرئيسية', ICONS.book)}
           ${renderNavBtn('mistakes', 'أخطائي', ICONS.alert, state.mistakes.filter(m => !m.resolved).length)}
-          ${renderMoreNavBtn()}
-          function renderMoreNavBtn() {
-  return `<button class="nav-btn" onclick="toggleMoreMenu()">
-    ${ICONS.more}
-    <span class="nav-label">المزيد</span>
-  </button>`;
-}
-
-function toggleMoreMenu() {
-  const menu = document.getElementById('more-menu');
-  if (menu) {
-    menu.remove();
-    return;
-  }
-
-  document.body.insertAdjacentHTML('beforeend', `
-    <div id="more-menu" class="more-menu">
-      <button onclick="navigate('reports'); document.getElementById('more-menu')?.remove()">
-        ${ICONS.chart}
-        <span>التقارير</span>
-      </button>
-
-      <button onclick="navigate('achievements'); document.getElementById('more-menu')?.remove()">
-        ${ICONS.award}
-        <span>الإنجازات</span>
-      </button>
-    </div>
-  `);
-}
+          ${renderNavBtn('reports', 'التقارير', ICONS.chart)}
+          ${renderNavBtn('achievements', 'الإنجازات', ICONS.award)}
         </div>
       </div>
     </nav>
@@ -1798,7 +1771,7 @@ render();
     app.classList.add('app-ready');
     loader.classList.add('is-hidden');
     setTimeout(() => loader.remove(), 950);
-  }, 2000);
+  }, 10000);
 })();
 
 // Auto-redistribute on first load
@@ -1813,4 +1786,4 @@ if (state.user && state.plan) {
   } catch (e) { console.warn('redistribute failed', e); }
 }
 
-
+</script>
