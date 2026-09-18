@@ -34,8 +34,60 @@
     return OFFSETS[surah - 1] + ayah;
   }
 
+  /* =========================
+     أيقونة السماعة
+  ========================= */
+
+  function speakerIcon() {
+    return `
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M4 10v4h4l5 4V6L8 10H4z"></path>
+        <path d="M16 9.5c1.1 1.1 1.1 3.9 0 5"></path>
+        <path d="M18.5 7c2.8 2.8 2.8 7.2 0 10"></path>
+      </svg>
+    `;
+  }
+
+  /* =========================
+     أيقونة الإيقاف المؤقت
+  ========================= */
+
+  function pauseIcon() {
+    return `
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <rect x="6" y="5" width="4" height="14" rx="1"></rect>
+        <rect x="14" y="5" width="4" height="14" rx="1"></rect>
+      </svg>
+    `;
+  }
+
   let audio = null;
   let activeButton = null;
+
+  /* =========================
+     تغيير حالة زر الصوت
+  ========================= */
+
+  function setButtonState(button, playing) {
+    if (!button) return;
+
+    button.innerHTML = playing
+      ? pauseIcon()
+      : speakerIcon();
+
+    button.classList.toggle('playing', playing);
+
+    button.setAttribute(
+      'aria-label',
+      playing
+        ? 'إيقاف مؤقت للتلاوة'
+        : 'تشغيل الآية'
+    );
+  }
+
+  /* =========================
+     إيقاف الصوت
+  ========================= */
 
   function stopAudio() {
     if (audio) {
@@ -44,186 +96,502 @@
     }
 
     if (activeButton) {
-      activeButton.innerHTML = '▶';
-      activeButton.classList.remove('playing');
+      setButtonState(activeButton, false);
     }
 
     audio = null;
     activeButton = null;
   }
 
+  /* =========================
+     تشغيل الآية
+  ========================= */
+
   function playAyah(surah, ayah, button) {
-    const globalAyah = getGlobalAyah(surah, ayah);
+    const globalAyah = getGlobalAyah(
+      surah,
+      ayah
+    );
 
     if (!globalAyah) return;
 
-    if (activeButton === button && audio) {
+    /* لو نفس الآية */
+    if (
+      activeButton === button &&
+      audio
+    ) {
       if (audio.paused) {
-        audio.play();
-        button.innerHTML = '❚❚';
-        button.classList.add('playing');
+
+        audio.play()
+          .then(() => {
+            setButtonState(button, true);
+          })
+          .catch(() => {});
+
       } else {
+
         audio.pause();
-        button.innerHTML = '▶';
-        button.classList.remove('playing');
+
+        setButtonState(
+          button,
+          false
+        );
       }
 
       return;
     }
 
+    /* إيقاف أي آية أخرى */
     stopAudio();
 
     const url =
       `${CDN}/${BITRATE}/${RECITER}/${globalAyah}.mp3`;
 
     audio = new Audio(url);
+
     activeButton = button;
 
-    button.innerHTML = '❚❚';
-    button.classList.add('playing');
+    setButtonState(
+      button,
+      true
+    );
 
-    audio.addEventListener('ended', () => {
-      button.innerHTML = '▶';
-      button.classList.remove('playing');
+    /* عند انتهاء الآية */
+    audio.addEventListener(
+      'ended',
+      () => {
 
-      audio = null;
-      activeButton = null;
-    });
+        setButtonState(
+          button,
+          false
+        );
 
-    audio.addEventListener('error', () => {
-      stopAudio();
-
-      if (typeof toast === 'function') {
-        toast('تعذر تشغيل التلاوة، حاول مرة أخرى', 'error');
+        audio = null;
+        activeButton = null;
       }
-    });
+    );
 
-    audio.play().catch(() => {
-      stopAudio();
+    /* في حالة وجود خطأ */
+    audio.addEventListener(
+      'error',
+      () => {
 
-      if (typeof toast === 'function') {
-        toast('اضغط على زر التشغيل مرة أخرى', 'error');
+        stopAudio();
+
+        if (typeof toast === 'function') {
+          toast(
+            'تعذر تشغيل التلاوة، حاول مرة أخرى',
+            'error'
+          );
+        }
       }
-    });
+    );
+
+    /* تشغيل الصوت */
+    audio.play()
+      .catch(() => {
+
+        stopAudio();
+
+        if (typeof toast === 'function') {
+          toast(
+            'اضغط على زر التشغيل مرة أخرى',
+            'error'
+          );
+        }
+      });
   }
+
+  /* =========================
+     معرفة السورة الحالية
+  ========================= */
 
   function getCurrentSurah() {
     try {
-      const day = state?.plan?.days?.[app_dayIdx];
-      return Number(day?.surahNumber || 0);
+
+      const day =
+        state?.plan?.days?.[app_dayIdx];
+
+      return Number(
+        day?.surahNumber || 0
+      );
+
     } catch (e) {
+
       return 0;
     }
   }
 
+  /* =========================
+     إضافة أزرار الصوت
+  ========================= */
+
   function addAudioButtons() {
-    const surah = getCurrentSurah();
+
+    const surah =
+      getCurrentSurah();
 
     if (!surah) return;
 
-    document.querySelectorAll(
-      '.verse-list .verse-item'
-    ).forEach(item => {
+    document
+      .querySelectorAll(
+        '.verse-list .verse-item'
+      )
+      .forEach(item => {
 
-      if (item.querySelector('.ayah-audio-btn')) return;
+        /* منع تكرار الزر */
+        if (
+          item.querySelector(
+            '.ayah-audio-btn'
+          )
+        ) {
+          return;
+        }
 
-      const numberEl =
-        item.querySelector('.verse-num');
+        const numberEl =
+          item.querySelector(
+            '.verse-num'
+          );
 
-      if (!numberEl) return;
+        if (!numberEl) return;
 
-      const ayah = Number(
-        toLatinDigits(numberEl.textContent.trim())
-      );
+        const ayah =
+          Number(
+            toLatinDigits(
+              numberEl.textContent.trim()
+            )
+          );
 
-      if (!ayah) return;
+        if (!ayah) return;
 
-      const button =
-        document.createElement('button');
+        const button =
+          document.createElement(
+            'button'
+          );
 
-      button.className = 'ayah-audio-btn';
-      button.type = 'button';
-      button.innerHTML = '▶';
+        button.className =
+          'ayah-audio-btn';
 
-      button.setAttribute(
-        'aria-label',
-        'تشغيل الآية'
-      );
+        button.type =
+          'button';
 
-      button.title =
-        'استماع بصوت الشيخ محمد صديق المنشاوي';
+        setButtonState(
+          button,
+          false
+        );
 
-      button.onclick = function(event) {
-        event.stopPropagation();
-        playAyah(surah, ayah, button);
-      };
+        button.title =
+          'استماع بصوت الشيخ محمد صديق المنشاوي';
 
-      item.insertBefore(
-        button,
-        item.firstChild
-      );
-    });
+        button.onclick =
+          function(event) {
+
+            event.stopPropagation();
+
+            playAyah(
+              surah,
+              ayah,
+              button
+            );
+          };
+
+        item.insertBefore(
+          button,
+          item.firstChild
+        );
+      });
   }
 
-  const style = document.createElement('style');
+  /* =========================
+     تصميم أزرار الصوت
+  ========================= */
+
+  const style =
+    document.createElement('style');
 
   style.textContent = `
+
+    /* مساحة للزر داخل الآية */
     .verse-item {
       position: relative;
-      padding-left: 50px !important;
+      padding-left: 58px !important;
     }
 
+    /* زر الصوت */
     .ayah-audio-btn {
       position: absolute;
-      left: 8px;
+
+      left: 9px;
       top: 50%;
-      transform: translateY(-50%);
 
-      width: 34px;
-      height: 34px;
+      transform:
+        translateY(-50%);
 
-      border: 1px solid var(--border);
+      width: 40px;
+      height: 40px;
+
+      padding: 0;
+
+      border:
+        1px solid
+        rgba(194, 136, 78, .28);
+
       border-radius: 50%;
 
-      background: var(--card);
-      color: var(--primary);
+      background:
+        linear-gradient(
+          145deg,
+          rgba(255,255,255,.96),
+          rgba(245,237,221,.96)
+        );
+
+      color:
+        var(--primary);
 
       display: flex;
+
       align-items: center;
       justify-content: center;
 
       cursor: pointer;
 
-      font-size: 12px;
-      font-family: Arial, sans-serif;
-
-      transition: .2s ease;
+      -webkit-tap-highlight-color:
+        transparent;
 
       box-shadow:
-        0 2px 6px rgba(0,0,0,.08);
+
+        0 4px 12px
+        rgba(92, 62, 32, .10),
+
+        inset 0 1px 0
+        rgba(255,255,255,.8);
+
+      transition:
+
+        transform .25s ease,
+        box-shadow .25s ease,
+        background .25s ease,
+        color .25s ease;
 
       z-index: 2;
     }
 
-    .ayah-audio-btn:hover,
-    .ayah-audio-btn.playing {
-      background: var(--primary);
-      color: white;
-      border-color: var(--primary);
-      transform: translateY(-50%) scale(1.06);
+    /* أيقونة السماعة */
+    .ayah-audio-btn svg {
+
+      width: 19px;
+      height: 19px;
+
+      fill: none;
+
+      stroke:
+        currentColor;
+
+      stroke-width: 1.8;
+
+      stroke-linecap: round;
+
+      stroke-linejoin: round;
+
+      transition:
+        transform .25s ease;
     }
+
+    /* عند المرور بالماوس */
+    .ayah-audio-btn:hover {
+
+      transform:
+        translateY(-50%)
+        scale(1.08);
+
+      box-shadow:
+
+        0 7px 18px
+        rgba(92, 62, 32, .16),
+
+        0 0 0 4px
+        rgba(194, 136, 78, .08);
+    }
+
+    /* عند الضغط */
+    .ayah-audio-btn:active {
+
+      transform:
+        translateY(-50%)
+        scale(.94);
+    }
+
+    /* أثناء التشغيل */
+    .ayah-audio-btn.playing {
+
+      background:
+        var(--primary);
+
+      color:
+        #fff;
+
+      border-color:
+        var(--primary);
+
+      box-shadow:
+
+        0 6px 18px
+        rgba(92, 62, 32, .22),
+
+        0 0 0 5px
+        rgba(194, 136, 78, .12);
+    }
+
+    /* حركة أيقونة التشغيل */
+    .ayah-audio-btn.playing svg {
+
+      transform:
+        scale(.94);
+    }
+
+    /* دائرة النبض */
+    .ayah-audio-btn.playing::before {
+
+      content: "";
+
+      position: absolute;
+
+      inset: -5px;
+
+      border:
+        1px solid
+        rgba(194, 136, 78, .42);
+
+      border-radius: 50%;
+
+      animation:
+        ayahAudioPulse
+        1.5s
+        ease-out
+        infinite;
+
+      pointer-events: none;
+    }
+
+    /* التركيز */
+    .ayah-audio-btn:focus-visible {
+
+      outline:
+        3px solid
+        rgba(194, 136, 78, .25);
+
+      outline-offset:
+        3px;
+    }
+
+    /* حركة النبض */
+    @keyframes ayahAudioPulse {
+
+      0% {
+
+        transform:
+          scale(.88);
+
+        opacity: .8;
+      }
+
+      70% {
+
+        transform:
+          scale(1.28);
+
+        opacity: 0;
+      }
+
+      100% {
+
+        transform:
+          scale(1.28);
+
+        opacity: 0;
+      }
+    }
+
+    /* =========================
+       الوضع الليلي
+    ========================= */
+
+    @media (prefers-color-scheme: dark) {
+
+      .ayah-audio-btn {
+
+        background:
+          linear-gradient(
+            145deg,
+            rgba(55,55,55,.96),
+            rgba(38,38,38,.96)
+          );
+
+        border-color:
+          rgba(255,255,255,.10);
+
+        box-shadow:
+
+          0 4px 12px
+          rgba(0,0,0,.25),
+
+          inset 0 1px 0
+          rgba(255,255,255,.05);
+      }
+    }
+
+    /* =========================
+       تحسين للموبايل
+    ========================= */
+
+    @media (max-width: 480px) {
+
+      .verse-item {
+
+        padding-left:
+          54px !important;
+      }
+
+      .ayah-audio-btn {
+
+        left: 7px;
+
+        width: 38px;
+        height: 38px;
+      }
+
+      .ayah-audio-btn svg {
+
+        width: 18px;
+        height: 18px;
+      }
+    }
+
   `;
 
   document.head.appendChild(style);
 
+  /* =========================
+     مراقبة تغيير الآيات
+  ========================= */
+
   const observer =
-    new MutationObserver(addAudioButtons);
+    new MutationObserver(
+      addAudioButtons
+    );
 
-  observer.observe(document.body, {
-    childList: true,
-    subtree: true
-  });
+  observer.observe(
+    document.body,
+    {
+      childList: true,
+      subtree: true
+    }
+  );
 
-  setTimeout(addAudioButtons, 300);
+  /* تشغيل أولي */
+  setTimeout(
+    addAudioButtons,
+    300
+  );
 
 })();
