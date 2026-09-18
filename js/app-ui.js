@@ -72,11 +72,8 @@ function render() {
       <div class="container-app">
         <div class="nav-items">
           ${renderNavBtn('calendar', 'التقويم', ICONS.calendar)}
-          ${renderNavBtn('test', 'اختبر حفظي', ICONS.list)}
           ${renderNavBtn('dashboard', 'الرئيسية', ICONS.book)}
-          ${renderNavBtn('mistakes', 'أخطائي', ICONS.alert, state.mistakes.filter(m => !m.resolved).length)}
-          ${renderNavBtn('reports', 'التقارير', ICONS.chart)}
-          ${renderNavBtn('achievements', 'الإنجازات', ICONS.award)}
+          ${renderNavBtn('more', 'المزيد', ICONS.menu)}
         </div>
       </div>
     </nav>
